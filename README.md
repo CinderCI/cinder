@@ -1,4 +1,4 @@
-# MagnumCi
+# Magnum CI
 
 TODO: Write a gem description
 

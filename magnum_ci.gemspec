@@ -1,23 +1,24 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+$:.unshift(lib) unless $:.include?(lib)
+
 require 'magnum_ci/version'
 
-Gem::Specification.new do |spec|
-  spec.name          = "magnum_ci"
-  spec.version       = MagnumCi::VERSION
-  spec.authors       = ["Tim Taylor"]
-  spec.email         = ["tim@tool-man.org"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
-  spec.homepage      = ""
-  spec.license       = "MIT"
+Gem::Specification.new do |s|
+  s.name          = "magnum_ci"
+  s.version       = MagnumCI::VERSION
+  s.authors       = ["Tim Taylor"]
+  s.email         = ["tim@detroitlabs.com"]
+  s.description   = "Continuous Delivery for iOS Apps"
+  s.summary       = "Magnum CI"
+  s.homepage      = ""
+  s.license       = "MIT"
 
-  spec.files         = `git ls-files`.split($/)
-  spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
-  spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
-  spec.require_paths = ["lib"]
+  s.add_development_dependency "bundler", "~> 1.3"
+  s.add_development_dependency "rake"
 
-  spec.add_development_dependency "bundler", "~> 1.3"
-  spec.add_development_dependency "rake"
+  s.files         = `git ls-files`.split($/)
+  s.executables   = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
+  s.test_files    = s.files.grep(%r{^(test|spec|features)/})
+  s.require_paths = ["lib"]
 end
