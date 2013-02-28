@@ -1,0 +1,3 @@
+module MagnumCi
+  VERSION = "0.0.1"
+end
