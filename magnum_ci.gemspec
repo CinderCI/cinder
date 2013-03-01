@@ -15,6 +15,7 @@ Gem::Specification.new do |s|
   s.license       = "MIT"
 
   s.add_dependency "commander", "~> 4.1.3"
+  s.add_dependency "extlib", "~> 0.9.16"
   s.add_development_dependency "bundler", "~> 1.3"
   s.add_development_dependency "rake"
 
