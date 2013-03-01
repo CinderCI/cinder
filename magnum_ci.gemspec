@@ -14,6 +14,7 @@ Gem::Specification.new do |s|
   s.homepage      = ""
   s.license       = "MIT"
 
+  s.add_dependency "commander", "~> 4.1.3"
   s.add_development_dependency "bundler", "~> 1.3"
   s.add_development_dependency "rake"
 
