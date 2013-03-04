@@ -30,3 +30,4 @@ command :build do |c|
     log `bin/ipa build --trace -c #{options.configuration} -s #{name}`
   end
 end
+alias_command :cibuild, :build
