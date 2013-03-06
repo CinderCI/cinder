@@ -31,4 +31,3 @@ command :build do |c|
     say_ok "Did all the things for #{name}"
   end
 end
-alias_command :cibuild, :build
