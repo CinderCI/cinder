@@ -12,6 +12,7 @@ command :setup do |c|
   private
 
   def install_cocoapods_dependencies
+    # TODO: externalize these
     private_cocoapod_repos = {
       'detroit-labs' => 'git@github.com:detroit-labs/detroit-labs-specs.git'
     }
