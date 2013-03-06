@@ -6,6 +6,7 @@ command :setup do |c|
   c.action do |args, options|
     install_cocoapods_dependencies
     import_provisioning_profiles
+    say_ok 'Setup complete'
   end
 
   private

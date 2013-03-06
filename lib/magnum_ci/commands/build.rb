@@ -28,6 +28,7 @@ command :build do |c|
     short_sha1 = `git rev-parse --short #{ENV['JANKY_SHA1'] || 'HEAD'}`
     log `/usr/libexec/PlistBuddy -c "Set :CFBundleVersion #{short_sha1}" "#{name}/#{name}-Info.plist"`
     log `bin/ipa build --trace -c #{options.configuration} -s #{name}`
+    say_ok "Did all the things for #{name}"
   end
 end
 alias_command :cibuild, :build
