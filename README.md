@@ -12,11 +12,11 @@ New Project Quickstart
     curl -L http://git.io/axIe8Q >Gemfile
     mkdir -p script
     curl -L http://git.io/dqT6SA >script/.magnum-exec
-    ( cd script \
-      chmod +x .magnum-exec \
+    ( cd script ; \
+      chmod +x .magnum-exec ; \
       ln -s .magnum-exec setup
     )
-    bundle install --binsutbs --path vendor
+    bundle install --binstubs --path vendor
     bin/magnum lint
 
 Paranoid? Get `Gemfile` and `.magnum-exec` from the gist https://gist.github.com/toolbear/43adc8aac86e348f7906
