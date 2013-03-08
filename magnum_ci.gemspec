@@ -18,6 +18,9 @@ Gem::Specification.new do |s|
   s.add_dependency "extlib", "~> 0.9.16"
   s.add_dependency "plist", "~> 3.1.0"
   s.add_dependency "dotenv", "~> 0.5.0"
+  s.add_dependency "cocoapods", "~> 0.16.0"
+  s.add_dependency "shenzhen", "~> 0.3.0"
+
   s.add_development_dependency "bundler", "~> 1.3"
   s.add_development_dependency "rake"
 
