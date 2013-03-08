@@ -10,3 +10,4 @@ require 'external_commands'
 
 require 'commands/build'
 require 'commands/setup'
+require 'commands/lint'
