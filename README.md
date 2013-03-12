@@ -11,9 +11,11 @@ iOS projects using MagnumCI:
 
 * have developers up and running after running a single command following `git clone`
 * build your app's ipa whenever code is pushed to your GitHub repo
-* publish successful builds of `master` as versions in [TestFlight](https://testflightapp.com/). The "What's New" shows changes since the last build and since the last release.
-* publish successful builds of *topic branches* as comments in the pull request with links to install a version of the app with that feature
-* comment and close pull requests of failed builds
+* publish successful builds of `master` as versions in [TestFlight](https://testflightapp.com/). <span style="color:#999">The "What's New" shows changes since the last build and since the last release.</span>
+* <span style="color:#999">publish successful builds of *topic branches* as comments in the pull request with links to install a version of the app with that feature</span>
+* <span style="color:#999">comment and close pull requests of failed builds</span>
+
+Items in <span style="color:#999">de-emphasized text</span> are still being developed.
 
 Usage
 -----
