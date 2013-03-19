@@ -41,7 +41,7 @@ New Project Quickstart
       chmod +x .magnum-exec ; \
       ln -s .magnum-exec setup
     )
-    bundle install --binstubs --path vendor
+    bundle install --binstubs --path .bundle
     bin/magnum lint
     # 10 fix errors
     # 20 bin/magnum lint
@@ -64,7 +64,7 @@ Copy `.magnum-exec` from [this gist](http://git.io/magnum_ci-skeleton) to your `
 directory. Mark it executable and symlink `setup` to it:
 
     chmod +x .magnum-exec
-    ln -s .magnum-exec setup 
+    ln -s .magnum-exec setup
 
 MagnumCI is Opinionated
 -----------------------
