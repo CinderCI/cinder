@@ -145,7 +145,36 @@ module MagnumCI
       result = acc
 
       acc[:build_configs].each do |name, config|
-        say_error "`#{config.name}' build configuration must have an `#{name}.mobileprovision' in project root" and result = nil unless acc[:provisioning_profiles][name]
+        file = acc[:provisioning_profiles][name] 
+        if file
+          begin
+            p7 = OpenSSL::PKCS7.new(File.read(file))
+            p7.verify([], OpenSSL::X509::Store.new)
+            profile = Plist::parse_xml(p7.data)
+            case name
+            when :ad_hoc
+              if profile['ProvisionsAllDevices']
+                say_error "`#{file}' appears to be an Enterprise provisioning profile" and result = nil
+              elsif !profile['ProvisionedDevices']
+                say_error "`#{file}' appears to be an AppStore provisioning profile" and result = nil
+              end
+              say_error "AdHoc provisioning must have at least 1 device provisioned" and result = nil if profile['ProvisionedDevices'].length > 0
+            when :app_store
+              say_error "`#{file}' appears to be an AdHoc provisioning profile" and result = nil if profile['ProvisionedDevices']
+              say_error "`#{file}' appears to be an Enterprise provisioning profile" and result = nil if profile['ProvisionsAllDevices']
+            when :enterprise
+              if profile['ProvisionedDevices']
+                say_error "`#{file}' appears to be an AdHoc provisioning profile" and result = nil
+              elsif !profile['ProvisionsAllDevices']
+                say_error "`#{file}' appears to be an AppStore provisioning profile" and result = nil
+              end
+            end
+          rescue
+            say_error "Invalid provisioning profile `#{file}'"
+          end
+        else
+          say_error "`#{config.name}' build configuration must have an `#{name}.mobileprovision' in project root" and result = nil
+        end
       end
       result
     end
