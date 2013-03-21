@@ -1,5 +1,6 @@
 require 'xcodeproj'
 require 'extlib'
+require 'cocoapods' # TODO: change to cocoapods-core once ~> 0.17
 
 module MagnumCI
   class Linter
@@ -9,6 +10,8 @@ module MagnumCI
 
     def _lint acc = {}
       acc &&=  detect_projects               acc
+      acc &&=  detect_workspaces             acc
+      acc &&=  determine_name                acc
       acc &&=  check_podfile                 acc
       acc &&=  check_workspace               acc
       acc &&=  check_single_project          acc
@@ -35,14 +38,30 @@ module MagnumCI
       acc
     end
 
+    def detect_workspaces acc
+      acc[:workspaces] = Dir["*.xcworkspace"].map {|f| File.basename(f)}.grep(/^(.*)\.xcworkspace$/){$1}
+      acc
+    end
+
+    def determine_name acc
+      if acc[:workspaces].length == 1
+        acc[:name] = acc[:workspaces].first
+      elsif acc[:projects].length == 1
+        acc[:name] = acc[:projects].first
+      end
+      acc
+    end
+
     def check_podfile acc
       result = acc
       file = Dir['Podfile'].first
       say_error "No CocoaPods Podfile found" and return nil unless file
-      # TODO: use cocoapods gem to read Podfile and inquire about platform and library dependencies
-      podfile = File.read(file)
-      say_error 'CocoaPods platform must be iOS' and result = nil unless podfile =~ /^platform\s+:ios/
-      say_error 'Must have at least one CocoaPods dependency' and result = nil unless podfile =~ /^pod\b/
+      podfile = Pod::Podfile.from_file file
+      target = podfile.target_definitions[acc[:name].to_sym] if acc[:name]
+      target ||= podfile.target_definitions[:default]
+      platform = target.platform.name if target.platform
+      say_error 'CocoaPods platform must be iOS' and result = nil unless platform == :ios
+      say_error 'Must have at least one CocoaPods dependency' and result = nil if target.dependencies.empty?
       result
     end
 
