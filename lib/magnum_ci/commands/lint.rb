@@ -21,8 +21,8 @@ module MagnumCI
       acc &&=  check_single_target           acc
       acc &&=  check_multiple_targets        acc
       acc &&=  detect_build_configs          acc
-      acc &&=  check_testing_configs         acc
       acc &&=  check_app_store_config        acc
+      acc &&=  check_testing_configs         acc
       acc &&=  detect_provisioning_profiles  acc
       acc &&=  check_provisioning_profiles   acc
 
@@ -131,6 +131,7 @@ module MagnumCI
     end
 
     def check_app_store_config acc
+      say_warning "Should have `AppStore' build configuration" unless acc[:build_configs][:app_store]
       acc
     end
 
