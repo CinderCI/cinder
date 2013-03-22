@@ -209,7 +209,7 @@ module MagnumCI
               end
             end
           rescue
-            say_error "Invalid provisioning profile `#{file}'"
+            say_error "Invalid provisioning profile `#{file}'" and result = nil
           end
         else
           say_error "`#{config.name}' build configuration must have an `#{name}.mobileprovision' in project root" and result = nil

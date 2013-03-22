@@ -4,8 +4,26 @@ require "magnum_ci/commands/lint"
 
 describe MagnumCI::Linter do
 
+  let(:ad_hoc_profile) do
+    double 'ad_hoc_profile',
+    :valid? => true,
+    :distribution => :ad_hoc,
+    :ad_hoc? => true,
+    :devices => ['BADF00D']
+  end
+
+  let(:enterprise_profile) do
+    double 'enterprise_profile',
+    :valid? => true,
+    :distribution => :enterprise,
+    :ad_hoc? => false,
+    :devices => []
+  end
+
   before do
     mock_terminal
+    MagnumCI::ProvisioningProfile.stub(:from_file).with('ad_hoc.mobileprovision') { ad_hoc_profile }
+    MagnumCI::ProvisioningProfile.stub(:from_file).with('enterprise.mobileprovision') { enterprise_profile }
   end
 
   describe "command output" do
