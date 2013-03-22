@@ -44,6 +44,7 @@ module MagnumCI
       acc &&=  check_testing_configs         acc
       acc &&=  detect_provisioning_profiles  acc
       acc &&=  check_provisioning_profiles   acc
+      acc &&=  check_scheme                  acc
 
       say_ok 'OK to go' if acc
       acc
@@ -216,6 +217,12 @@ module MagnumCI
         end
       end
       result
+    end
+
+    def check_scheme acc
+      schemes = Dir["#{acc[:name]}.xcodeproj/xcshareddata/xcschemes/#{acc[:name]}.xcscheme"].grep(/^(.*)\.xcscheme$/){$1}
+      say_error "Must have `#{acc[:name]}' a shared Xcode scheme" and return nil if schemes.empty?
+      acc
     end
    end
 
