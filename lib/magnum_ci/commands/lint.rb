@@ -197,7 +197,7 @@ module MagnumCI
               elsif !profile['ProvisionedDevices']
                 say_error "`#{file}' appears to be an AppStore provisioning profile" and result = nil
               end
-              say_error "AdHoc provisioning must have at least 1 device provisioned" and result = nil if profile['ProvisionedDevices'].length > 0
+              say_error "AdHoc provisioning must have at least 1 device provisioned" and result = nil if profile['ProvisionedDevices'].empty?
             when :app_store
               say_error "`#{file}' appears to be an AdHoc provisioning profile" and result = nil if profile['ProvisionedDevices']
               say_error "`#{file}' appears to be an Enterprise provisioning profile" and result = nil if profile['ProvisionsAllDevices']
