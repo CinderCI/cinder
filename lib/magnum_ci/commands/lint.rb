@@ -18,7 +18,7 @@ module MagnumCI
         2. Tell Hubot to set it up in Janky
 
                 @bot ci setup #{acc[:repo_company]}/#{acc[:repo_name]}
-                @bot ci set room #{acc[:repo_name]} ROOM
+                @bot ci set room #{acc[:repo_name]} #{acc[:name]}
 
         3. Create a distribution list named ‘#{acc[:name]}’ in TestFlight
 
