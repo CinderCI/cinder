@@ -1,11 +1,30 @@
+# -*- coding: utf-8 -*-
 require 'xcodeproj'
 require 'extlib'
 require 'cocoapods' # TODO: change to cocoapods-core once ~> 0.17
+require 'rugged'
 
 module MagnumCI
   class Linter
     def lint options, args
-      abort unless _lint
+      abort unless acc = _lint(detect_repository({}))
+      say <<-EOS.margin if `git ls-files .cinder`.split($/).empty?
+
+        Additional Steps
+        ================
+
+        1. Add ‘deckard’ group to #{acc[:repo_company]}/#{acc[:repo_name]} in GitHub
+
+        2. Tell Hubot to set it up in Janky
+
+                @bot ci setup #{acc[:repo_company]}/#{acc[:repo_name]}
+                @bot ci set room #{acc[:repo_name]} ROOM
+
+        3. Create a distribution list named ‘#{acc[:name]}’ in TestFlight
+
+        4. Add and commit a `.cinder` file to repository to turn off this message
+
+        EOS
     end
 
     def _lint acc = {}
@@ -27,10 +46,30 @@ module MagnumCI
       acc &&=  check_provisioning_profiles   acc
 
       say_ok 'OK to go' if acc
-      acc != nil
+      acc
     end
 
     private
+
+    def detect_repository acc
+      begin
+        path = Rugged::Repository.discover
+      rescue
+        say_error "Must be in a git repository" and return nil
+      end
+      acc[:repo] = repo = Rugged::Repository.new path
+      acc[:root] = root = File.expand_path '..', repo.path
+
+      say_error "Must be at the root of the project at `#{root}'" and return nil unless root == Dir.getwd
+      upstream = repo.remotes.grep(/upstream/).first
+      upstream ||= repo.remotes.grep(/origin/).first
+      upstream &&= Rugged::Remote.lookup repo, upstream
+      if upstream.url =~ %r{github.com[:/]([\w-]+)/([\w-]+).git}
+        acc[:repo_company], acc[:repo_name] = $1, $2
+      end
+      say_error "Must have `upstream' or `origin' remote on GitHub" and return nil unless acc[:repo_name]
+      acc
+    end
 
     def detect_projects acc
       acc[:projects] = projects = Dir["*.xcodeproj"].map {|f| File.basename(f)}.grep(/^(.*)\.xcodeproj$/){$1}
