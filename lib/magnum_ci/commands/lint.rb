@@ -96,7 +96,7 @@ module MagnumCI
       file = Dir['Podfile'].first
       say_error "No CocoaPods Podfile found" and return nil unless file
       podfile = Pod::Podfile.from_file file
-      target = podfile.target_definitions[acc[:name].to_sym] if acc[:name]
+      target = podfile.target_definitions[acc[:name]] if acc[:name]
       target ||= podfile.target_definitions[:default]
       platform = target.platform.name if target.platform
       say_error 'CocoaPods platform must be iOS' and result = nil unless platform == :ios
