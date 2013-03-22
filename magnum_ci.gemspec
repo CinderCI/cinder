@@ -20,9 +20,12 @@ Gem::Specification.new do |s|
   s.add_dependency "dotenv", "~> 0.5.0"
   s.add_dependency "cocoapods", "~> 0.16.0"
   s.add_dependency "shenzhen", "~> 0.3.0"
+  s.add_dependency "rugged", "~> 0.17.0.b8"
 
   s.add_development_dependency "bundler", "~> 1.3"
   s.add_development_dependency "rake"
+  s.add_development_dependency 'rspec'
+  s.add_development_dependency 'fakefs', '~> 0.3.2'
 
   s.files         = `git ls-files`.split($/)
   s.executables   = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
