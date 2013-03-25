@@ -5,7 +5,55 @@ require 'cocoapods' # TODO: change to cocoapods-core once ~> 0.17
 require 'rugged'
 
 module MagnumCI
+
+  class ProvisioningProfile
+    attr_reader :distribution
+    attr_reader :devices
+
+    def self.from_file f
+      begin
+        p7 = OpenSSL::PKCS7.new(File.read(f))
+        p7.verify([], OpenSSL::X509::Store.new)
+        new Plist::parse_xml(p7.data)
+      rescue
+        new
+      end
+    end
+
+    def initialize profile = nil
+      if profile
+        @valid = true
+        @devices = []
+        if profile['ProvisionsAllDevices']
+          @distribution = :enterprise
+        elsif profile['ProvisionedDevices']
+          @distribution = :ad_hoc
+          @devices = profile['ProvisionedDevices']
+        else
+          # FIXME: could be a developer provisioning profile; need a better check
+          @distribution = :app_store
+        end
+      else
+        @valid = false
+      end
+    end
+
+    def valid?
+      @valid == true
+    end
+
+    def ad_hoc?
+      @distribution == :ad_hoc
+    end
+  end
+
   class Linter
+    DISTRIBUTION_METHODS = {
+      :ad_hoc => 'AdHoc',
+      :app_store => 'AppStore',
+      :enterprise => 'Enterprise'
+    }
+
     def lint options, args
       abort unless acc = _lint(detect_repository({}))
       say <<-EOS.margin if `git ls-files .cinder`.split($/).empty?
@@ -44,6 +92,7 @@ module MagnumCI
       acc &&=  check_testing_configs         acc
       acc &&=  detect_provisioning_profiles  acc
       acc &&=  check_provisioning_profiles   acc
+      acc &&=  check_scheme                  acc
 
       say_ok 'OK to go' if acc
       acc
@@ -184,32 +233,14 @@ module MagnumCI
       result = acc
 
       acc[:build_configs].each do |name, config|
-        file = acc[:provisioning_profiles][name] 
+        file = acc[:provisioning_profiles][name]
         if file
-          begin
-            p7 = OpenSSL::PKCS7.new(File.read(file))
-            p7.verify([], OpenSSL::X509::Store.new)
-            profile = Plist::parse_xml(p7.data)
-            case name
-            when :ad_hoc
-              if profile['ProvisionsAllDevices']
-                say_error "`#{file}' appears to be an Enterprise provisioning profile" and result = nil
-              elsif !profile['ProvisionedDevices']
-                say_error "`#{file}' appears to be an AppStore provisioning profile" and result = nil
-              end
-              say_error "AdHoc provisioning must have at least 1 device provisioned" and result = nil if profile['ProvisionedDevices'].empty?
-            when :app_store
-              say_error "`#{file}' appears to be an AdHoc provisioning profile" and result = nil if profile['ProvisionedDevices']
-              say_error "`#{file}' appears to be an Enterprise provisioning profile" and result = nil if profile['ProvisionsAllDevices']
-            when :enterprise
-              if profile['ProvisionedDevices']
-                say_error "`#{file}' appears to be an AdHoc provisioning profile" and result = nil
-              elsif !profile['ProvisionsAllDevices']
-                say_error "`#{file}' appears to be an AppStore provisioning profile" and result = nil
-              end
-            end
-          rescue
-            say_error "Invalid provisioning profile `#{file}'"
+          profile = ProvisioningProfile.from_file file
+          if profile.valid?
+            say_error "`#{file}' appears to be an #{DISTRIBUTION_METHODS[profile.distribution]} provisioning profile" and result = nil unless name == profile.distribution
+            say_error "AdHoc provisioning must have at least 1 device provisioned" and result = nil if profile.ad_hoc? && profile.devices.empty?
+          else
+            say_error "Invalid provisioning profile `#{file}'" and result = nil
           end
         else
           say_error "`#{config.name}' build configuration must have an `#{name}.mobileprovision' in project root" and result = nil
@@ -217,7 +248,13 @@ module MagnumCI
       end
       result
     end
-   end
+
+    def check_scheme acc
+      schemes = Dir["#{acc[:name]}.xcodeproj/xcshareddata/xcschemes/#{acc[:name]}.xcscheme"].grep(/^(.*)\.xcscheme$/){$1}
+      say_error "Must have a shared Xcode scheme named `#{acc[:name]}'" and return nil if schemes.empty?
+      acc
+    end
+  end
 
   command :lint do |c|
     c.syntax = 'magnum lint'
