@@ -4,7 +4,7 @@ require 'extlib'
 require 'cocoapods' # TODO: change to cocoapods-core once ~> 0.17
 require 'rugged'
 
-module MagnumCI
+module Cinder
 
   class ProvisioningProfile
     attr_reader :distribution
@@ -73,11 +73,11 @@ module MagnumCI
         4. Create `setup` and `build` scripts
 
                 mkdir -p script
-                curl -L http://git.io/dqT6SA >script/.magnum-exec
+                curl -L http://git.io/dqT6SA >script/.cinder-exec
                 ( cd script ; \\
-                  chmod +x .magnum-exec ; \\
-                  ln -s .magnum-exec setup ; \\
-                  ln -s .magnum-exec build )
+                  chmod +x .cinder-exec ; \\
+                  ln -s .cinder-exec setup ; \\
+                  ln -s .cinder-exec build )
 
         5. Create `script/cibuild`
 
@@ -277,9 +277,9 @@ module MagnumCI
   end
 
   command :lint do |c|
-    c.syntax = 'magnum lint'
+    c.syntax = 'cinder lint'
     c.summary = 'Check for CI problems'
-    c.description = 'Report if your project is missing or deviating from Magnum CI conventions.'
+    c.description = 'Report if your project is missing or deviating from Cinder conventions.'
     c.action Linter, :lint
   end
 end

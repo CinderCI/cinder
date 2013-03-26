@@ -1,4 +1,4 @@
-module MagnumCI
+module Cinder
   def self.pod! command
     execute_command 'bin/pod', command
   end

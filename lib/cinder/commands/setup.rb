@@ -1,6 +1,6 @@
-module MagnumCI
+module Cinder
   command :setup do |c|
-    c.syntax = 'magnum setup'
+    c.syntax = 'cinder setup'
     c.summary = 'Setup project.'
     c.description = 'Set up project for development and building.'
 

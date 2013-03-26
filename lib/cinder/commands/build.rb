@@ -1,6 +1,6 @@
-module MagnumCI
+module Cinder
   command :build do |c|
-    c.syntax = 'magnum build [OPTIONS]'
+    c.syntax = 'cinder build [OPTIONS]'
     c.summary = 'Build & publish a release.'
     c.description = 'Build a release. For AdHoc or Enterprise builds against `master`, publish to TestFlight.'
 
