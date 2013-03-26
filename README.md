@@ -35,12 +35,7 @@ New Project Quickstart
 
 In the top-level of your project run:
 
-    curl -L http://git.io/axIe8Q >Gemfile
-    bundle install --binstubs --path .bundle
-    bin/cinder lint
-    # 10 fix errors
-    # 20 bin/cinder lint
-    # 30 if errors GOTO 10
+    ruby -e "$(curl -fsSL https://raw.github.com/detroit-labs/cinder/hot)"
 
 This is a one-time initialization that only one developer must complete. Afterwards, anyone cloning the project can simply run:
 
