@@ -1,0 +1,108 @@
+#!/usr/bin/env ruby
+
+def say_error message
+  $stderr.puts message
+  true
+end
+
+# Pre-flight
+existing = %w[Gemfile script/.cinder-exec script/setup script/build].select {|f| File.exists? f}
+existing.each { |f| say_error "`#{f}' already exists" }
+say_error <<-'eom'.gsub(/^ {2}/, '') and abort unless existing.empty?
+
+  Try "Installation for Existing Projects"
+
+      https://github.com/detroit-labs/cinder/blob/master/README.md
+eom
+say_error <<-'eom'.gsub(/^ {2}/, '') and abort unless Kernel.system '/usr/bin/which rbenv >/dev/null 2>&1'
+  rbenv required. Try:
+
+      brew install rbenv ruby-build
+eom
+say_error <<-'eom'.gsub(/^ {2}/, '') and abort if `rbenv version` =~ /^system/
+  Cannot use system ruby. Try:
+
+      rbenv install VERSION
+      echo VERSION >.ruby-version
+
+  Replace VERSION with your preferred ruby.
+eom
+say_error <<-'eom'.gsub(/^ {2}/, '') and abort unless Kernel.system '/usr/bin/which bundle >/dev/null 2>&1'
+  Bundler required. Try:
+
+      gem install bundler
+eom
+
+# Consent
+puts <<-eom.gsub(/^ {2}/, '') if STDIN.tty?
+
+  I will create:
+
+      Gemfile
+      script/.cinder-exec
+      script/setup
+      script/cibuild
+
+  Then I will execute:
+    
+      bundle install --binstubs --path .bundle
+
+  Press ENTER to continue. Ctrl-C to abort.
+eom
+gets and puts "Hansel. So hot right now. Hansel." if STDIN.tty?
+
+# Go!
+File.open('Gemfile', 'w') do |f|
+  f.puts <<-'eof'.gsub(/^ {4}/, '')
+    source 'https://rubygems.org'
+    source 'https://raw.github.com/detroit-labs/erebor/gems/'
+    
+    gem 'cinder'
+  eof
+end
+
+`mkdir -p script`
+Dir.chdir('script') do
+  File.open('.cinder-exec', 'w') do |f|
+  f.puts <<-'eof'.gsub(/^ {6}/, '')
+      #!/bin/bash
+      # Make sure deps are available and run a Cinder command.
+      
+      set -e
+      
+      if ! gem spec bundler -v '~> 1.2' >/dev/null 2>&1 ; then
+        gem install bundler --no-ri --no-rdoc
+        rbenv rehash
+      fi
+      if ! bundle check >/dev/null 2>&1 ; then
+        bundle install --binstubs --path vendor
+        rbenv rehash
+      fi
+      
+      SCRIPT=$(basename "$0")
+      case $SCRIPT in
+        setup)
+        exec bin/cinder setup "$@"
+        ;;
+      
+        *)
+        bin/cinder setup
+        exec bin/cinder "$SCRIPT" "$@"
+       ;;
+      esac
+    eof
+  end
+  `chmod +x .cinder-exec`
+  `ln -s .cinder-exec setup`
+  `ln -s .cinder-exec build`
+end
+say_error 'Uh oh' and abort unless Kernel.system 'bundle install --binstubs --path .bundle'
+puts <<-'eom'.gsub(/^ {2}/, '')
+
+  Your turn:
+
+      bin/cinder lint
+      # 10 fix errors
+      # 20 bin/cinder lint
+      # 30 if errors GOTO 10
+eom
