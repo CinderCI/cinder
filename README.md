@@ -33,26 +33,25 @@ Usage
 New Project Quickstart
 ----------------------
 
-    cd your-project
+In the top-level of your project run:
+
     curl -L http://git.io/axIe8Q >Gemfile
-    mkdir -p script
-    curl -L http://git.io/dqT6SA >script/.magnum-exec
-    ( cd script ; \
-      chmod +x .magnum-exec ; \
-      ln -s .magnum-exec setup
-    )
     bundle install --binstubs --path .bundle
     bin/magnum lint
     # 10 fix errors
     # 20 bin/magnum lint
     # 30 if errors GOTO 10
 
-Paranoid? Get `Gemfile` and `.magnum-exec` from [http://git.io/magnum_ci-skeleton](http://git.io/magnum_ci-skeleton) in place of the curl commands.
+This is a one-time initialization that only one developer must complete. Afterwards, anyone cloning the project can simply run:
+
+    script/setup
 
 Installation for Existing Projects
 ----------------------------------
 
-MagnumCI is published to [Erebor](https://github.com/detroit-labs/erebor) instead of [rubygems.org](http://rubygems.org). Add this line to the top of `Gemfile`:
+If your project doesn't use Bundler (e.g. doesn't have a `Gemfile`) then follow **New Project Quickstart** above.
+
+Add this line to the top of `Gemfile`:
 
     source 'https://raw.github.com/detroit-labs/erebor/gems/'
 
@@ -60,11 +59,20 @@ Add this line to the gems portion of `Gemfile`:
 
     gem 'magnum_ci'
 
-Copy `.magnum-exec` from [this gist](http://git.io/magnum_ci-skeleton) to your `script`
-directory. Mark it executable and symlink `setup` to it:
+MagnumCI expects that you use binstubs with Bundler and vendor gems under `.bundle`. Run:
 
-    chmod +x .magnum-exec
-    ln -s .magnum-exec setup
+    bundle install --binstubs --path .bundle
+    git add .bundle/config
+    echo '/.bundle/ruby/' >>.gitignore
+    
+Henceforth `bundle install` without flags is sufficient.
+
+The `magnum` CLI should now be available under `bin/`. It will guide you the rest of the way:
+
+    bin/magnum lint
+    # 10 fix errors
+    # 20 bin/magnum lint
+    # 30 if errors GOTO 10
 
 MagnumCI is Opinionated
 -----------------------

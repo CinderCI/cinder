@@ -70,7 +70,27 @@ module MagnumCI
 
         3. Create a distribution list named ‘#{acc[:name]}’ in TestFlight
 
-        4. Add and commit a `.cinder` file to repository to turn off this message
+        4. Create `setup` and `build` scripts
+
+                mkdir -p script
+                curl -L http://git.io/dqT6SA >script/.magnum-exec
+                ( cd script ; \\
+                  chmod +x .magnum-exec ; \\
+                  ln -s .magnum-exec setup ; \\
+                  ln -s .magnum-exec build )
+
+        5. Create `script/cibuild`
+
+                #!/bin/bash
+                exec "$(dirname $0)/build" --configuration #{acc[:build_configs].keys.grep(/ad_hoc|enterprise/).sort.first.to_s.camel_case}
+
+        6. Add the following to `.gitignore`
+
+                /.bundle/ruby/
+                /Pods/
+                /bin/
+
+        7. Add and commit a `.cinder` file to repository to turn off this message
 
         EOS
     end
