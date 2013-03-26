@@ -1,8 +1,8 @@
 require "spec_helper"
 require 'stringio'
-require "magnum_ci/commands/lint"
+require "cinder/commands/lint"
 
-describe MagnumCI::Linter do
+describe Cinder::Linter do
 
   let(:ad_hoc_profile) do
     double 'ad_hoc_profile',
@@ -22,13 +22,13 @@ describe MagnumCI::Linter do
 
   before do
     mock_terminal
-    MagnumCI::ProvisioningProfile.stub(:from_file).with('ad_hoc.mobileprovision') { ad_hoc_profile }
-    MagnumCI::ProvisioningProfile.stub(:from_file).with('enterprise.mobileprovision') { enterprise_profile }
+    Cinder::ProvisioningProfile.stub(:from_file).with('ad_hoc.mobileprovision') { ad_hoc_profile }
+    Cinder::ProvisioningProfile.stub(:from_file).with('enterprise.mobileprovision') { enterprise_profile }
   end
 
   describe "command output" do
 
-    let(:linter) { MagnumCI::Linter.new }
+    let(:linter) { Cinder::Linter.new }
     subject do
       linter._lint
       @output.string
