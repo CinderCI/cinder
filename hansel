@@ -32,6 +32,13 @@ say_error <<-'eom'.gsub(/^ {2}/, '') and abort unless Kernel.system '/usr/bin/wh
 
       gem install bundler
 eom
+ruby_version = `rbenv version`.chomp
+say_error <<-eom.gsub(/^ {2}/, '') and abort unless Kernel.system 'rbenv which bundle >/dev/null 2>&1'
+  Bundler required in #{ruby_version}.
+  Try:
+
+      gem install bundler
+eom
 
 # Consent
 puts <<-eom.gsub(/^ {2}/, '') if STDIN.tty?
