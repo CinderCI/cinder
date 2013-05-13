@@ -7,8 +7,8 @@ require 'cinder/version'
 Gem::Specification.new do |s|
   s.name          = "cinder"
   s.version       = Cinder::VERSION
-  s.authors       = ["Tim Taylor"]
-  s.email         = ["tim@detroitlabs.com"]
+  s.authors       = ["Tim Taylor", "Nate West"]
+  s.email         = ["tim@detroitlabs.com", "nwest@detroitlabs.com"]
   s.description   = "Continuous Delivery for iOS Apps"
   s.summary       = "Cinder"
   s.homepage      = "https://github.com/detroit-labs/cinder"
