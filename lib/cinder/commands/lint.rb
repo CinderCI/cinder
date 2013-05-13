@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 require 'xcodeproj'
 require 'extlib'
-require 'cocoapods' # TODO: change to cocoapods-core once ~> 0.17
+require 'cocoapods-core'
 require 'rugged'
 
 module Cinder
@@ -165,8 +165,7 @@ module Cinder
       file = Dir['Podfile'].first
       say_error "No CocoaPods Podfile found" and return nil unless file
       podfile = Pod::Podfile.from_file file
-      target = podfile.target_definitions[acc[:name]] if acc[:name]
-      target ||= podfile.target_definitions[:default]
+      target = podfile.root_target_definitions.first
       platform = target.platform.name if target.platform
       say_error 'CocoaPods platform must be iOS' and result = nil unless platform == :ios
       say_error 'Must have at least one CocoaPods dependency' and result = nil if target.dependencies.empty?
@@ -228,7 +227,7 @@ module Cinder
 
     def detect_build_configs acc
       a = acc[:xcodeproj].build_configurations
-      acc[:build_configs] = configs = a.find_all { |c| c.name =~ /^(?:AdHoc|AppStore|Enterprise)$/ }.each_with_object({}) { |c,h| h[c.name.snake_case.to_sym] = c }
+      acc[:build_configs] = a.find_all { |c| c.name =~ /^(?:AdHoc|AppStore|Enterprise)$/ }.each_with_object({}) { |c,h| h[c.name.snake_case.to_sym] = c }
       acc
     end
 
