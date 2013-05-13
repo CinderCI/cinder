@@ -62,7 +62,6 @@ gets and puts "Hansel. So hot right now. Hansel." if STDIN.tty?
 File.open('Gemfile', 'w') do |f|
   f.puts <<-'eof'.gsub(/^ {4}/, '')
     source 'https://rubygems.org'
-    source 'https://raw.github.com/detroit-labs/erebor/gems/'
     
     gem 'cinder'
   eof
@@ -82,7 +81,7 @@ Dir.chdir('script') do
         rbenv rehash
       fi
       if ! bundle check >/dev/null 2>&1 ; then
-        bundle install --binstubs --path vendor
+        bundle install --binstubs --path .bundle
         rbenv rehash
       fi
       
