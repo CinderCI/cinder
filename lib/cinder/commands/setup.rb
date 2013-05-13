@@ -13,24 +13,8 @@ module Cinder
     private
 
     def self.install_cocoapods_dependencies
-      # TODO: externalize these
-      private_cocoapod_repos = {
-        'detroit-labs' => 'git@github.com:detroit-labs/detroit-labs-specs.git'
-      }
-      log 'pod', 'Updating local CocoaPods specs'
-      repo_update_lines = pod!('repo update').lines
-      if repo_update_lines.grep(/Updating spec repo `master'/).empty?
-        log 'pod', 'Setting up public specs repo'
-        pod! 'setup'
-      end
-      private_cocoapod_repos.each do |name, url|
-        if repo_update_lines.grep(/Updating spec repo `#{name}'/).empty?
-          log 'pod', "Adding #{name} specs repo"
-          pod! "repo add #{name} #{url}"
-        end
-      end
-      log 'pod', 'Installing project dependencies'
-      pod! 'install --no-update'
+      log 'pod', 'Installing Cocoapods dependencies'
+      pod! 'install'
     end
 
     def self.import_provisioning_profiles
