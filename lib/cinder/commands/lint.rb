@@ -130,10 +130,11 @@ module Cinder
       acc[:root] = root = File.expand_path '..', repo.path
 
       say_error "Must be at the root of the project at `#{root}'" and return nil unless root == Dir.getwd
-      upstream = repo.remotes.grep(/upstream/).first
-      upstream ||= repo.remotes.grep(/origin/).first
-      upstream &&= Rugged::Remote.lookup repo, upstream
-      if upstream.url =~ %r{github.com[:/]([\w-]+)/([\w-]+).git}
+      remotes = `git remote -v`.split("\n")
+      # TODO: switch back to using rugged once 0.17.0 is released on rubygems
+      upstream = remotes.grep(/upstream/).first
+      upstream ||= remotes.grep(/origin/).first
+      if upstream.split[1] =~ %r{github.com[:\/]([\w-]+)\/([\w-]+)(.git)?}
         acc[:repo_company], acc[:repo_name] = $1, $2
       end
       say_error "Must have `upstream' or `origin' remote on GitHub" and return nil unless acc[:repo_name]
