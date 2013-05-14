@@ -1,0 +1,25 @@
+#!/bin/bash
+# Make sure deps are available and run a Cinder command.
+
+set -e
+
+if ! gem spec bundler -v '~> 1.2' >/dev/null 2>&1 ; then
+  gem install bundler --no-ri --no-rdoc
+  rbenv rehash
+fi
+if ! bundle check >/dev/null 2>&1 ; then
+  bundle install --binstubs --path .bundle
+  rbenv rehash
+fi
+
+SCRIPT=$(basename "$0")
+case $SCRIPT in
+  setup)
+  exec bin/cinder setup "$@"
+  ;;
+
+  *)
+  bin/cinder setup
+  exec bin/cinder "$SCRIPT" "$@"
+  ;;
+esac
