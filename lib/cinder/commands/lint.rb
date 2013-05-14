@@ -73,7 +73,7 @@ module Cinder
         4. Create `setup` and `build` scripts
 
                 mkdir -p script
-                curl -L http://git.io/dqT6SA >script/.cinder-exec
+                curl -L https://raw.github.com/CinderCI/cinder/exec >script/.cinder-exec
                 ( cd script ; \\
                   chmod +x .cinder-exec ; \\
                   ln -s .cinder-exec setup ; \\
