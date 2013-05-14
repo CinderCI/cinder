@@ -10,8 +10,8 @@ HighLine.track_eof = false # Fix for built-in Ruby
 program :version, Cinder::VERSION
 program :description, 'Continuous Delivery for iOS Apps'
 
-program :help, 'Author', 'Tim Taylor <tim@detroitlabs.com>'
-program :help, 'Website', 'https://github.com/detroit-labs/cinder'
+program :help, 'Authors', 'Tim Taylor <tim@detroitlabs.com>, Nate West <nwest@detroitlabs.com>'
+program :help, 'Website', 'https://github.com/CinderCI/cinder'
 program :help_formatter, :compact
 
 default_command :help
