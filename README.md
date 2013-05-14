@@ -46,11 +46,7 @@ Installation for Existing Projects
 
 If your project doesn't use Bundler (e.g. doesn't have a `Gemfile`) then follow **New Project Quickstart** above.
 
-Add this line to the top of `Gemfile`:
-
-    source 'https://raw.github.com/detroit-labs/erebor/gems/'
-
-Add this line to the gems portion of `Gemfile`:
+Cinder is available on Rubygems. Add this line to your `Gemfile`:
 
     gem 'cinder'
 
