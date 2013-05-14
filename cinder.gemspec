@@ -7,12 +7,18 @@ require 'cinder/version'
 Gem::Specification.new do |s|
   s.name          = "cinder"
   s.version       = Cinder::VERSION
+  s.platform      = Gem::Platform::RUBY
   s.authors       = ["Tim Taylor", "Nate West"]
   s.email         = ["tim@detroitlabs.com", "nwest@detroitlabs.com"]
-  s.description   = "Continuous Delivery for iOS Apps"
-  s.summary       = "Cinder"
-  s.homepage      = "https://github.com/detroit-labs/cinder"
+  s.summary       = "Continuous Delivery for iOS Apps"
+  s.homepage      = "https://github.com/CinderCI/cinder"
   s.license       = "MIT"
+  s.description   = <<desc
+Cinder does the heavy lifting for building and distributing 
+iOS applications in a continuous integration environment.
+desc
+
+  s.requirements  << 'Xcode Command Line Tools'
 
   s.add_dependency "commander", "~> 4.1.3"
   s.add_dependency "extlib", "~> 0.9.16"
