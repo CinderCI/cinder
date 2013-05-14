@@ -1,5 +1,4 @@
-Cinder
-========
+# Cinder
 
 Continuous Delivery for iOS Apps.
 
@@ -17,8 +16,7 @@ iOS projects using Cinder:
 
 Items in <span style="color:#999">de-emphasized text</span> are still being developed.
 
-Usage
------
+## Usage
 
 * `script/setup` - run this after cloning a project and you're ready to develop in Xcode. Re-run it whenever project dependencies have changed.
 
@@ -30,8 +28,7 @@ Usage
 * `bin/cinder lint` - will guide you through setting up a new project or modifying an existing project to work with Cinder.
 
 
-New Project Quickstart
-----------------------
+## New Project Quickstart
 
 In the top-level of your project run:
 
@@ -41,8 +38,7 @@ This is a one-time initialization that only one developer must complete. Afterwa
 
     script/setup
 
-Installation for Existing Projects
-----------------------------------
+## Installation for Existing Projects
 
 If your project doesn't use Bundler (e.g. doesn't have a `Gemfile`) then follow **New Project Quickstart** above.
 
@@ -65,11 +61,28 @@ The `cinder` CLI should now be available under `bin/`. It will guide you the res
     # 20 bin/cinder lint
     # 30 if errors GOTO 10
 
-Cinder is Opinionated
------------------------
+## Cinder is Opinionated
 
 * Ruby is an integral part of the development, build, and
   release toolchain for native iOS apps
 * Ruby versions are managed by [rbenv](https://github.com/sstephenson/rbenv)
 * Automation always wins
 * Convention over configuration; when there's more than one way to do it, pick one
+
+## Contributing
+
+1. Fork it
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create new Pull Request
+
+## Credits
+
+Cinder is built and maintained at [Detroit Labs](http://detroitlabs.com) by [Tim Taylor](http://github.com/toolbear) and [Nate West](http://github.com/nwest).
+
+![Detroit Labs](http://i.imgur.com/OgGhz1U.png)
+
+## License
+
+Cinder is released under the [MIT](http://opensource.org/licenses/MIT) license.
