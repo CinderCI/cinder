@@ -1,4 +1,4 @@
-# Cinder [![Dependency Status](https://gemnasium.com/CinderCI/cinder.png)](https://gemnasium.com/CinderCI/cinder)
+# Cinder [![Dependency Status](https://gemnasium.com/CinderCI/cinder.png)](https://gemnasium.com/CinderCI/cinder) [![Code Climate](https://codeclimate.com/github/CinderCI/cinder.png)](https://codeclimate.com/github/CinderCI/cinder)
 
 Continuous Delivery for iOS Apps.
 
