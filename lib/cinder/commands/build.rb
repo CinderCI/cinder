@@ -11,9 +11,8 @@ module Cinder
 
       name = determine_workspace
       use_keychain options.configuration.snake_case
-      set_bundle_version name
       build_ipa options.configuration, name
-      publish_ipa name
+      run_tests options.configuration, name
       say_ok "Did all the things for #{name}"
     end
 
@@ -49,7 +48,12 @@ module Cinder
 
     def self.build_ipa configuration, name
       log 'ipa', "Building an ipa with configuration `#{configuration}' and scheme `#{name}'"
-      ipa! "build --trace -c #{configuration} -s #{name}"
+      xctool! "-workspace #{name}.xcworkspace -scheme #{name} clean build ONLY_ACTIVE_ARCH=NO"
+    end
+
+    def self.run_tests configuration, name
+      log 'ipa', "Running tests for configuration #{configuration} and scheme #{name}'"
+      xctool! "-workspace #{name}.xcworkspace -scheme #{name} test ONLY_ACTIVE_ARCH=NO"
     end
 
     def self.publish_ipa name

@@ -20,6 +20,9 @@ module Cinder
   def self.ipa! command
     execute_command 'bin/ipa', command
   end
+  def self.xctool! command
+    execute_command :xctool, command
+  end
 
   private
 
@@ -27,17 +30,12 @@ module Cinder
     bin = `which #{name}`.strip
     say_error "command not found: #{name}" and abort if bin.empty?
 
-    require 'open4'
-
     full_command = "#{bin} #{command}"
 
-    out = ''
-    options = {:stdout => out, :stderr => out, :status => true}
-    status  = Open4.spawn(full_command, options)
-    unless status.success?
-      log name, out
-      say_error "#{bin} exited with status #{status.exitstatus}" and abort
+    IO.popen(full_command, external_encoding: "UTF-8") do |data|
+      data.each { |s| print s }
+      data.close
+      say_error "Failed: Exited with status #{$?.to_i}" and abort unless $?.to_i == 0
     end
-    out
   end
 end
